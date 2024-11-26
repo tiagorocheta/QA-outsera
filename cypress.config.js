@@ -10,7 +10,7 @@ module.exports = defineConfig({
     },
     e2e: {
         baseUrl: 'https://servicodados.ibge.gov.br/api/v1', // URL base da API
-        specPattern: 'cypress/e2e/**/*.cy.js', // Padrão para localizar os arquivos de teste
+        specPattern: 'cypress/e2e/**/*.cy.js', // Padrão para localizar os arquivos de teste                    
         screenshotOnRunFailure: true, // Captura screenshots automaticamente em caso de falha
         video: false,                 // Desativa gravação de vídeo (opcional, ajustável)
         setupNodeEvents(on, config) {
