@@ -27,24 +27,27 @@ describe('API IBGE - Testes de Estados', () => {
         });
     });
 
-    it('Deve retornar 200 quando o estado não existe', () => {
+    it('Deve retornar 200 para um estado inexistente', () => {
+        // Devido à implementação da API, mesmo para estados inexistentes, o retorno é 200.
+        // Verificamos que o corpo da resposta está vazio.
         cy.request({
             url: '/localidades/estados/999',
             failOnStatusCode: false, // Evita que o teste falhe automaticamente
         }).then((response) => {
-            expect(response.status).to.eq(200); // Verifica o status de não encontrado
-            expect(response.body).to.be.empty; // A API não deve retornar conteúdo para esse caso
+            expect(response.status).to.eq(200); // Limitação da API
+            expect(response.body).to.be.empty; // Garante que o corpo não contém dados inesperados
         });
     });
 
-    it('Deve retornar erro 200 quando o ID do estado for inválido', () => {// Devido a implantação da api, ela retorna 200 para quando nao encontrar o id especifico
-        
+    it('Deve retornar 200 quando o ID do estado for inválido', () => {
+        // Devido à implementação da API, um status 200 é retornado mesmo para IDs inválidos.
+        // Verificamos que o corpo da resposta está vazio ou contém informações esperadas.
         cy.request({
             url: '/localidades/estados/abc', // Um ID que não faz sentido
             failOnStatusCode: false,
         }).then((response) => {
-            validarResposta(response); // Utilizando a função aqui
-            // Adicionar validações adicionais se necessário
+            validarResposta(response); // Valida status 200 e headers comuns
+            expect(response.body).to.be.empty; // Garante que a resposta está vazia
         });
     });
 });
