@@ -1,0 +1,59 @@
+appId: com.qazandoqafood
+app: "./maestro/app-release.apk"
+---
+- launchApp: {}
+
+- tapOn:
+    id: "email"
+
+- assertVisible: "E-mail"
+
+- inputText: teste@teste.com
+
+- tapOn:
+    id: "password"
+
+- inputText: 123456
+
+- tapOn:
+    id: "login-button"
+
+- assertVisible: "Selecione seu endereço..."
+
+- tapOn:
+    text: "Selecione seu endereço..."
+
+- tapOn:
+    id: "android:id/button1"
+
+- tapOn:
+    point: "11%,84%"
+
+- assertVisible: "Churrascaria Gaúcha"
+
+- tapOn: "Picanha - 500g"
+
+- tapOn:
+    point: "95%,47%"
+
+- tapOn:
+    point: "55%,88%"
+
+- assertVisible: "Sacola"
+
+- tapOn:
+    point: "50%,92%"
+
+- scroll: {}
+
+- assertVisible: "Cartão de crédito"
+
+- tapOn: "Cartão de crédito"
+
+- assertVisible: "Av. Governador A. Konder, 20"
+
+- tapOn: "FAZER PEDIDO"
+
+- assertVisible: "Churrascaria Gaúcha"
+
+- stopApp: {}
