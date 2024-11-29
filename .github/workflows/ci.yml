@@ -36,7 +36,7 @@ jobs:
       run: npx cypress run --reporter mocha-allure-reporter
 
     - name: Install Maestro CLI
-      run: curl -Ls "https://get.maestro.mobile.dev" | bash
+      run: npm install -g maestro@2.1.1
 
     - name: Run Maestro tests
       run: |
