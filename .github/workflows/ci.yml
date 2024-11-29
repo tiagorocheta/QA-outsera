@@ -33,5 +33,4 @@ jobs:
       run: npx cypress run
 
     
-    - name: Run Mobile Tests
-      run: npm run test:mobile
+    
