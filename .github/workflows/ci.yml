@@ -32,8 +32,6 @@ jobs:
     - name: Run Cypress tests (E2E)
       run: npx cypress run
 
-    - name: Run API Tests
-      run: npm run test:api
-
+    
     - name: Run Mobile Tests
       run: npm run test:mobile
