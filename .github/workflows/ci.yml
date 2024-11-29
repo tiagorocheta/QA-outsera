@@ -39,4 +39,4 @@ jobs:
       run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
     - name: Run Maestro tests
-      run: npx maestro test 
+      run: npx maestro test ./maestro/login_fluxo.yaml
