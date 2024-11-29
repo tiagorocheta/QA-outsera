@@ -39,14 +39,4 @@ jobs:
       run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
     - name: Run Maestro tests
-      run: maestro test ./maestro/login_fluxo.yaml
-
-    - name: Generate Allure Report
-      run: |
-        npx allure generate --clean -o allure-report
-
-    - name: Upload Allure Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: allure-report
-        path: allure-report
+      run: npx maestro test 
