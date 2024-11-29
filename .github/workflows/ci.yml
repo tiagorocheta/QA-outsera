@@ -1,0 +1,35 @@
+name: CI/CD Pipeline for Tests
+
+on:
+  push:
+    branches:
+      - main
+      - testes-automatizados
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Cypress tests (E2E)
+      run: npx cypress run
+
+    - name: Run API Tests
+      run: npm run test:api
+
+    - name: Run Mobile Tests
+      run: npm run test:mobile
