@@ -37,7 +37,7 @@ jobs:
 
     - name: Generate Allure Report
       run: |
-        allure generate --clean -o allure-report
+        npx allure generate --clean -o allure-report
 
     - name: Upload Allure Report
       uses: actions/upload-artifact@v3
