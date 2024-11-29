@@ -32,6 +32,9 @@ jobs:
     - name: Install Cucumber Preprocessor and Allure Reporter
       run: npm install @badeball/cypress-cucumber-preprocessor allure-commandline mochawesome --save-dev
 
+    - name: List Feature Files
+      run: ls cypress/e2e/**/*.feature
+
     - name: Run API Tests
       run: npx cypress run --spec "cypress/e2e/**/*.cy.js" --reporter mochawesome
 
