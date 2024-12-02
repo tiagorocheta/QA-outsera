@@ -79,3 +79,21 @@ jobs:
           else
             echo "Relatório não encontrado, não será feito upload"
           fi
+
+      - name: Install Cucumber Preprocessor
+        run: npm install @badeball/cypress-cucumber-preprocessor --save-dev
+
+      - name: Run E2E Tests (Cucumber)
+        run: |
+          TEST_TYPE=e2e npx cypress run --spec "e2e/**/*.feature" --env allure=true --env allure=true
+
+      - name: Generate Allure Report for E2E Tests
+        run: |
+          mkdir -p allure-results
+          npx allure generate allure-results --clean -o allure-e2e-report
+
+      - name: Upload Allure Report for E2E
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-e2e-report
+          path: allure-e2e-report
