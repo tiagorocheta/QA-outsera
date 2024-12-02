@@ -15,49 +15,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2
+      - name: Check out the repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install Cypress
-      run: npx cypress install
+      - name: Install Cypress and Allure Plugin
+        run: |
+          npx cypress install
+          npm install @badeball/cypress-cucumber-preprocessor @shelex/cypress-allure-plugin allure-commandline --save-dev
 
-    - name: Install Cucumber Preprocessor and Allure Reporter
-      run: npm install @badeball/cypress-cucumber-preprocessor allure-commandline mochawesome --save-dev
-
-    # Etapa para listar todos os arquivos e diretórios na raiz
-    - name: List All Files in Repository Root
-      run: ls -laR
-
-    # Criar um arquivo .feature de exemplo para verificar se pode ser executado
-    - name: Create Sample Feature File
-      run: echo 'Feature: Sample\n  Scenario: Test\n    Given I open the website' > cypress/e2e/sample.feature
-
-    # Executar o teste no arquivo .feature criado
-    - name: Run Sample Feature Test
-      run: npx cypress run --spec "cypress/e2e/sample.feature" --reporter mochawesome
-
-    # Executar todos os testes na pasta cypress/
-    - name: Run All Tests (Cypress)
-      run: npx cypress run --spec "cypress/**/*.*" --reporter mochawesome
-
-    # Gerar o relatório Allure a partir dos relatórios de mochawesome
-    - name: Generate Allure Report
-      run: |
-        mkdir -p allure-results
-        cp cypress/reports/*.json allure-results/
-        npx allure generate allure-results --clean -o allure-report
-
-    # Upload do relatório do Allure
-    - name: Upload Allure Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: allure-report
-        path: allure-report
+      # Step to list all fil
