@@ -1,6 +1,6 @@
 # CI/CD Pipeline para Testes Automatizados - Outsera
 
-Este projeto contém um pipeline CI/CD configurado para executar testes automatizados utilizando várias ferramentas e frameworks, com foco em garantir a qualidade do código e validação contínua. O objetivo é garantir que os testes sejam realizados de maneira eficiente em todas as etapas do desenvolvimento, desde testes de API até testes E2E. Abaixo, você encontrará um resumo dos principais componentes e etapas.
+Este projeto contém um pipeline CI/CD configurado para executar testes automatizados utilizando várias ferramentas e frameworks, com foco em garantir a qualidade do código e validação contínua. O objetivo é garantir que os testes sejam realizados de maneira eficiente em todas as etapas do desenvolvimento, desde testes de API até testes E2E e testes de carga. Abaixo, você encontrará um resumo dos principais componentes e etapas.
 
 ## Estrutura do Pipeline
 
@@ -30,6 +30,11 @@ Este projeto contém um pipeline CI/CD configurado para executar testes automati
 - **Gerar Relatório Allure para Testes E2E**: Gera um relatório detalhado dos resultados dos testes E2E.
 - **Fazer upload do Relatório Allure para Testes E2E**: O relatório gerado é enviado como um artefato para acompanhamento da qualidade do sistema.
 
+#### Testes de Carga - K6
+- **Criar teste de carga**: O script de teste de carga está localizado no diretório `load-tests/load-test.js`. Ele simula 500 usuários simultâneos acessando a API pública `https://jsonplaceholder.typicode.com/posts/1` por um período de 5 minutos.
+- **Executar teste de carga com K6**: Durante o pipeline, o teste de carga é executado para garantir que a API seja capaz de lidar com grandes volumes de requisições de forma estável.
+- **Fazer upload do Relatório de Teste de Carga**: O relatório gerado é enviado como um artefato do pipeline, permitindo análise detalhada sobre a performance da API.
+
 ## Como Executar o Pipeline
 
 O pipeline é acionado automaticamente em determinadas situações, incluindo:
@@ -42,9 +47,10 @@ O pipeline é acionado automaticamente em determinadas situações, incluindo:
 - **Cucumber**: Para testes em Gherkin, garantindo que os fluxos do sistema sigam os requisitos especificados.
 - **Allure**: Ferramenta de relatórios que facilita a análise dos resultados dos testes automatizados.
 - **Maestro**: Usado para automação de testes em aplicativos móveis Android.
+- **K6**: Utilizado para simular testes de carga e garantir a performance das APIs.
 
 ## Como Verificar os Relatórios
-Os relatórios gerados pelo Allure e pelo Maestro são carregados como artefatos no GitHub Actions e podem ser baixados e analisados para obter detalhes sobre cada etapa do teste, incluindo sucessos, falhas e capturas de tela de erros.
+Os relatórios gerados pelo Allure, Maestro e K6 são carregados como artefatos no GitHub Actions e podem ser baixados e analisados para obter detalhes sobre cada etapa do teste, incluindo sucessos, falhas e capturas de tela de erros.
 
 ## Considerações Finais
 Este pipeline foi desenvolvido para garantir a qualidade contínua do projeto, integrando diferentes tipos de testes automatizados. Ele pode ser expandido conforme necessário para incluir mais verificações ou ferramentas que ajudem a manter a qualidade do produto.

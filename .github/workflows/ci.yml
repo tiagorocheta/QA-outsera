@@ -90,7 +90,7 @@ jobs:
 
       - name: Executar testes E2E (Cucumber)
         run: |
-          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --env allure=true' --env allure=true --env allure=true
+          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --env allure=true'
 
       - name: Gerar Relatório Allure para Testes E2E
         run: |
