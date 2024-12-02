@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Tests
+name: CI/CD Pipeline for Maestro Dev Tests
 
 on:
   push:
@@ -26,27 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Cypress
-        run: npx cypress install
+      - name: Install Cypress and Allure Reporter
+        run: npm install cypress allure-commandline mochawesome --save-dev
 
-      - name: Install Cucumber Preprocessor and Allure Reporter
-        run: npm install @badeball/cypress-cucumber-preprocessor allure-commandline mochawesome --save-dev
-
-      # Step to list all files and directories in the root
-      - name: List All Files in Repository Root
-        run: ls -laR
-
-      # Create a sample .feature file to verify if it can be executed
-      - name: Create Sample Feature File
-        run: echo -e "Feature: Sample\n  Scenario: Test\n    Given I open the website" > cypress/e2e/sample.feature
-
-      # Run the test on the created sample .feature file
-      - name: Run Sample Feature Test
-        run: npx cypress run --spec "cypress/e2e/sample.feature" --reporter mochawesome
-
-      # Run all tests in the cypress/ folder
-      - name: Run All Tests (Cypress)
-        run: npx cypress run --spec "cypress/**/*.*" --reporter mochawesome
+      # Run Maestro Dev Tests
+      - name: Run Maestro Dev Tests
+        run: npx cypress run --spec "cypress/e2e/maestro-dev/**/*.*" --reporter mochawesome
 
       # Generate Allure report from mochawesome reports
       - name: Generate Allure Report
