@@ -114,7 +114,7 @@ jobs:
 
       - name: Executar teste de carga com K6
         run: |
-          k6 run load-tests/load-test.js
+          k6 run load-tests/load-test.js --out json=load-tests/load-test.json
 
       - name: Fazer upload do Relatório de Teste de Carga
         if: success()
