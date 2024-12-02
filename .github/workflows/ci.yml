@@ -62,13 +62,9 @@ jobs:
           name: allure-report
           path: allure-report
 
-      - name: Install Maestro CLI
+      - name: Install Maestro CLI via Homebrew
         run: |
-          curl -Ls "https://get.maestro.mobile.dev" -o maestro
-          chmod +x maestro
-          mkdir -p ~/bin
-          mv maestro ~/bin/
-          echo "export PATH=\$PATH:~/bin" >> $GITHUB_ENV
+          brew install mobile-dev/tap/maestro
 
       - name: Run Maestro Test
         run: |
