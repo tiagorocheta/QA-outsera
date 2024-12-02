@@ -1,11 +1,12 @@
-name: CI/CD Pipeline for Tests
+name: CI/CD Pipeline for API IBGE Tests
 
 on:
   push:
     branches:
       - main
       - ci-pipeline
-      - cucumber-integration
+      - testes-automatizados
+      - maestro
   pull_request:
     branches:
       - main
@@ -26,9 +27,40 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+
+=======
+      - name: Reinstall Dependencies for Platform
+        run: |
+          rm -rf node_modules
+          npm install
+
       - name: Install Cypress and Allure Plugin
         run: |
           npx cypress install
-          npm install @badeball/cypress-cucumber-preprocessor @shelex/cypress-allure-plugin allure-commandline --save-dev
+          npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
 
-      # Step to list all fil
+      - name: Configure Allure Plugin
+        run: |
+          mkdir -p cypress/plugins
+          echo "module.exports = {" >> cypress/plugins/index.js
+          echo "  setupNodeEvents(on, config) {" >> cypress/plugins/index.js
+          echo "    require('@shelex/cypress-allure-plugin/writer')(on);" >> cypress/plugins/index.js
+          echo "    return config;" >> cypress/plugins/index.js
+          echo "  }," >> cypress/plugins/index.js
+          echo "};" >> cypress/plugins/index.js
+
+      - name: Run API IBGE Tests
+        run: |
+          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js"
+
+      - name: Generate Allure Report
+        run: |
+          mkdir -p allure-results
+          npx allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report
+>>>>>>> maestro
