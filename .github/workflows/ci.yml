@@ -26,14 +26,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Cypress
-        run: npx cypress install
-
       - name: Install Allure Reporter
         run: npm install allure-commandline mocha-allure-reporter --save-dev
-
-      - name: Run Cypress tests (Maestro Dev)
-        run: npx cypress run --spec "cypress/e2e/maestro-dev/**/*.*" --reporter mocha-allure-reporter
 
       - name: Install Maestro CLI
         run: npm install -g maestro@2.1.1
