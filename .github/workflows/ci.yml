@@ -83,9 +83,14 @@ jobs:
       - name: Install Cucumber Preprocessor
         run: npm install @badeball/cypress-cucumber-preprocessor --save-dev
 
+      - name: Install Additional Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev libgtk-3-0 xvfb
+
       - name: Run E2E Tests (Cucumber)
         run: |
-          TEST_TYPE=e2e npx cypress run --spec "e2e/**/*.feature" --env allure=true --env allure=true
+          xvfb-run -a TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --env allure=true --env allure=true --env allure=true
 
       - name: Generate Allure Report for E2E Tests
         run: |
