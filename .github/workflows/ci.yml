@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - ci-pipeline
-      - cucumber-integration
+      - testes-automatizados
   pull_request:
     branches:
       - main
@@ -26,21 +26,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Cypress and Allure Reporter
-        run: npm install cypress allure-commandline mochawesome --save-dev
+      - name: Install Cypress
+        run: npx cypress install
 
-      # Run Maestro Dev Tests
-      - name: Run Maestro Dev Tests
-        run: npx cypress run --spec "cypress/e2e/maestro-dev/**/*.*" --reporter mochawesome
+      - name: Install Allure Reporter
+        run: npm install allure-commandline mocha-allure-reporter --save-dev
 
-      # Generate Allure report from mochawesome reports
+      - name: Run Cypress tests (Maestro Dev)
+        run: npx cypress run --spec "cypress/e2e/maestro-dev/**/*.*" --reporter mocha-allure-reporter
+
+      - name: Install Maestro CLI
+        run: npm install -g maestro@2.1.1
+
+      - name: Run Maestro tests
+        run: |
+          mkdir -p maestro-report
+          npx maestro test ./maestro/login_fluxo.yaml --format junit --output maestro-report/report.xml
+
       - name: Generate Allure Report
         run: |
           mkdir -p allure-results
-          cp cypress/reports/*.json allure-results/
+          if [ -f maestro-report/report.xml ]; then cp maestro-report/report.xml allure-results/; fi
           npx allure generate allure-results --clean -o allure-report
 
-      # Upload the Allure report
       - name: Upload Allure Report
         uses: actions/upload-artifact@v3
         with:
