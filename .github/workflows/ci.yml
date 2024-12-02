@@ -106,6 +106,7 @@ jobs:
       - name: Instalar K6
         run: |
           sudo apt-get update
+          curl -s https://packagecloud.io/install/repositories/loadimpact/k6/script.deb.sh | sudo bash
           sudo apt-get install -y k6
 
       - name: Executar teste de carga com K6
