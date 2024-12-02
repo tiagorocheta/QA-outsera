@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for API IBGE Tests and Maestro Tests
+name: CI/CD Pipeline for testes-outsera
 
 on:
   push:
@@ -16,28 +16,28 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Check out the repository
+      - name: Fazer checkout do repositório
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
 
-      - name: Install dependencies
+      - name: Instalar dependências
         run: npm install
 
-      - name: Reinstall Dependencies for Platform
+      - name: Reinstalar dependências para a plataforma
         run: |
           rm -rf node_modules
           npm install
 
-      - name: Install Cypress and Allure Plugin
+      - name: Instalar Cypress e Plugin Allure
         run: |
           npx cypress install
           npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
 
-      - name: Configure Allure Plugin
+      - name: Configurar Plugin Allure
         run: |
           mkdir -p cypress/plugins
           echo "module.exports = {" >> cypress/plugins/index.js
@@ -47,30 +47,30 @@ jobs:
           echo "  }," >> cypress/plugins/index.js
           echo "};" >> cypress/plugins/index.js
 
-      - name: Run API IBGE Tests
+      - name: Executar testes da API IBGE
         run: |
           TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js"
 
-      - name: Generate Allure Report
+      - name: Gerar Relatório Allure
         run: |
           mkdir -p allure-results
           npx allure generate allure-results --clean -o allure-report
 
-      - name: Upload Allure Report
+      - name: Fazer upload do Relatório Allure
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
 
-      - name: Install Maestro CLI
+      - name: Instalar CLI do Maestro
         run: npm install -g maestro@2.1.1
 
-      - name: Run Maestro Test
+      - name: Executar teste do Maestro
         run: |
           mkdir -p maestro-report
           npx maestro test maestro/app-release.apk --format junit --output maestro-report.xml || echo "Erro na execução do teste do Maestro"
 
-      - name: Upload Maestro Report
+      - name: Fazer upload do Relatório do Maestro
         if: success()
         run: |
           if [ -f maestro-report.xml ]; then
@@ -80,24 +80,24 @@ jobs:
             echo "Relatório não encontrado, não será feito upload"
           fi
 
-      - name: Install Cucumber Preprocessor
+      - name: Instalar Preprocessador Cucumber
         run: npm install @badeball/cypress-cucumber-preprocessor --save-dev
 
-      - name: Install Additional Dependencies
+      - name: Instalar dependências adicionais
         run: |
           sudo apt-get update
           sudo apt-get install -y libgbm-dev libgtk-3-0 xvfb
 
-      - name: Run E2E Tests (Cucumber)
+      - name: Executar testes E2E (Cucumber)
         run: |
           xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --env allure=true' --env allure=true --env allure=true
 
-      - name: Generate Allure Report for E2E Tests
+      - name: Gerar Relatório Allure para Testes E2E
         run: |
           mkdir -p allure-results
           npx allure generate allure-results --clean -o allure-e2e-report
 
-      - name: Upload Allure Report for E2E
+      - name: Fazer upload do Relatório Allure para Testes E2E
         uses: actions/upload-artifact@v4
         with:
           name: allure-e2e-report
