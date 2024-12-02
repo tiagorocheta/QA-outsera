@@ -32,19 +32,23 @@ jobs:
     - name: Install Cucumber Preprocessor and Allure Reporter
       run: npm install @badeball/cypress-cucumber-preprocessor allure-commandline mochawesome --save-dev
 
-    # Etapa para listar todos os arquivos no repositório
-    - name: List All Files in Repository
-      run: ls -R
+    # Etapa para listar todos os arquivos e diretórios na raiz
+    - name: List All Files in Repository Root
+      run: ls -laR
 
-    # Etapa para listar todos os arquivos dentro do diretório Cypress
-    - name: List Files in Cypress Directory
-      run: ls -R cypress/
+    # Criar um arquivo .feature de exemplo para verificar se pode ser executado
+    - name: Create Sample Feature File
+      run: echo 'Feature: Sample\n  Scenario: Test\n    Given I open the website' > cypress/e2e/sample.feature
 
-    # Executar todos os testes disponíveis na pasta cypress/e2e
+    # Executar o teste no arquivo .feature criado
+    - name: Run Sample Feature Test
+      run: npx cypress run --spec "cypress/e2e/sample.feature" --reporter mochawesome
+
+    # Executar todos os testes na pasta cypress/
     - name: Run All Tests (Cypress)
-      run: npx cypress run --spec "cypress/e2e/*.*" --reporter mochawesome
+      run: npx cypress run --spec "cypress/**/*.*" --reporter mochawesome
 
-    # Gerar o relatório do Allure
+    # Gerar o relatório Allure a partir dos relatórios de mochawesome
     - name: Generate Allure Report
       run: |
         mkdir -p allure-results
