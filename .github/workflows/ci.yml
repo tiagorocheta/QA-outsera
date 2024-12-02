@@ -6,6 +6,7 @@ on:
       - main
       - ci-pipeline
       - testes-automatizados
+      - maestro
   pull_request:
     branches:
       - main
