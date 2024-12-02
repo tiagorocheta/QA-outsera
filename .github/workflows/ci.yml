@@ -62,14 +62,16 @@ jobs:
           name: allure-report
           path: allure-report
 
-      - name: Install Maestro CLI via Homebrew
+      - name: Install Maestro CLI
         run: |
-          brew install mobile-dev/tap/maestro
+          curl -Ls "https://get.maestro.mobile.dev" -o maestro
+          chmod +x maestro
+          mkdir -p ~/.local/bin
+          mv maestro ~/.local/bin/
+          echo "~/.local/bin" >> $GITHUB_PATH
 
       - name: Run Maestro Test
-        run: |
-          export PATH=$PATH:~/bin
-          maestro test maestro/app-release.apk --device android --appId com.qazandoqafood --format junit --output maestro-report.xml --device android --appId com.qazandoqafood --format junit --output maestro-report.xml
+        run: maestro test maestro/app-release.apk --device android --appId com.qazandoqafood --format junit --output maestro-report.xml --device android --appId com.qazandoqafood --format junit --output maestro-report.xml --device android --appId com.qazandoqafood --format junit --output maestro-report.xml
 
       - name: Upload Maestro Report
         uses: actions/upload-artifact@v4
