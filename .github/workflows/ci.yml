@@ -65,7 +65,8 @@ jobs:
       - name: Install Maestro CLI
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
-          sudo mv maestro /usr/local/bin/maestro
+          sudo mv maestro /usr/local/bin/
+          export PATH=$PATH:/usr/local/bin
 
       - name: Run Maestro Test
         run: |
