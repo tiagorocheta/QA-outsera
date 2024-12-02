@@ -27,8 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-
-=======
       - name: Reinstall Dependencies for Platform
         run: |
           rm -rf node_modules
@@ -63,4 +61,3 @@ jobs:
         with:
           name: allure-report
           path: allure-report
->>>>>>> maestro
