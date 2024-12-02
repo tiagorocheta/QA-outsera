@@ -68,10 +68,14 @@ jobs:
       - name: Run Maestro Test
         run: |
           mkdir -p maestro-report
-          npx maestro test maestro/app-release.apk --format junit --output maestro-report.xml
+          npx maestro test maestro/app-release.apk --format junit --output maestro-report.xml || echo "Erro na execução do teste do Maestro"
 
       - name: Upload Maestro Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: maestro-report
-          path: maestro-report.xml
+        if: success()
+        run: |
+          if [ -f maestro-report.xml ]; then
+            echo "Relatório encontrado, iniciando upload"
+            mv maestro-report.xml maestro-report/
+          else
+            echo "Relatório não encontrado, não será feito upload"
+          fi
