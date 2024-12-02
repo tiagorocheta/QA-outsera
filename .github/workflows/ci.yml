@@ -43,7 +43,7 @@ jobs:
           echo "};" >> cypress/plugins/index.js
 
       - name: Run API IBGE Tests
-        run: npx cypress run --spec "api-tests/ibge-api.cy.js" --reporter cypress-allure-plugin
+        run: npx cypress run --spec "api-tests/ibge-api.cy.js"
 
       - name: Generate Allure Report
         run: |
