@@ -27,6 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Reinstall Dependencies for Platform
+        run: |
+          rm -rf node_modules
+          npm install
+
       - name: Install Cypress and Allure Plugin
         run: |
           npx cypress install
