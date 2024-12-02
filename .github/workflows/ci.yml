@@ -72,7 +72,8 @@ jobs:
 
       - name: Run Maestro Test
         run: |
-          maestro test maestro/app-release.apk --device android --appId com.qazandoqafood --format junit --output maestro-report.xml
+          export PATH=$PATH:~/bin
+          maestro test maestro/app-release.apk --device android --appId com.qazandoqafood --format junit --output maestro-report.xml --device android --appId com.qazandoqafood --format junit --output maestro-report.xml
 
       - name: Upload Maestro Report
         uses: actions/upload-artifact@v4
