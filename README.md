@@ -1,34 +1,42 @@
 # CI/CD Pipeline para Testes Automatizados - Outsera
 
-Este projeto contém um pipeline CI/CD configurado para executar testes automatizados utilizando várias ferramentas e frameworks, com foco em garantir a qualidade do código e validação contínua. O objetivo é garantir que os testes sejam realizados de maneira eficiente em todas as etapas do desenvolvimento, desde testes de API até testes E2E e testes de carga. Abaixo, você encontrará um resumo dos principais componentes e etapas.
+Este projeto contém um pipeline CI/CD configurado para executar testes automatizados utilizando várias ferramentas e frameworks, com o objetivo de garantir a qualidade do código e validação contínua. O pipeline foi projetado para assegurar que todos os testes sejam realizados de forma eficiente, abrangendo testes de API, testes E2E e testes de carga. Abaixo está um resumo dos principais componentes e etapas do pipeline.
 
 ## Estrutura do Pipeline
 
 ### 1. Instalação e Configuração
 
-- **Fazer checkout do repositório**: Clona o repositório para o ambiente CI/CD, garantindo que a versão mais recente dos arquivos esteja disponível.
-- **Configurar Node.js**: Configura a versão 16 do Node.js para garantir compatibilidade com as dependências do projeto.
-- **Instalar dependências**: Instala todas as dependências listadas no `package.json`.
-- **Reinstalar dependências para a plataforma**: Remove a pasta `node_modules` e reinstala as dependências para garantir que tudo esteja corretamente configurado para a plataforma usada no CI/CD.
+- **Fazer checkout do repositório**: O repositório é clonado para o ambiente CI/CD, garantindo que a versão mais recente dos arquivos esteja disponível para execução dos testes.
+- **Configurar Node.js**: Configura a versão 16 do Node.js, garantindo compatibilidade com as dependências do projeto.
+- **Instalar dependências**: Instala todas as dependências necessárias listadas no `package.json`.
+- **Reinstalar dependências para a plataforma**: Remove a pasta `node_modules` e reinstala as dependências para garantir que tudo esteja configurado corretamente para o ambiente CI/CD.
 
 ### 2. Testes Automatizados
 
 #### Testes de API - IBGE
-- **Executar testes da API IBGE**: Usa o Cypress para testar os endpoints da API do IBGE, garantindo que os dados estejam corretos e que as respostas dos endpoints sejam como esperado.
-- **Gerar Relatório Allure**: Gera um relatório detalhado dos resultados dos testes da API usando o Allure, facilitando a visualização dos resultados.
-- **Fazer upload do Relatório Allure**: O relatório gerado é enviado como um artefato do pipeline, permitindo download e análise posterior.
+- **Executar testes da API IBGE**: Utiliza o Cypress para testar os endpoints da API do IBGE, validando que os dados retornados estejam corretos e os endpoints respondam de forma adequada.
+- **Testes Incluídos**:
+  - **Lista Completa de Estados**: Valida se a lista de estados é retornada corretamente, verificando se os campos esperados estão presentes.
+  - **Detalhes do Estado de São Paulo (ID: 35)**: Verifica se os detalhes do estado de São Paulo são retornados corretamente.
+  - **Estado Inexistente**: Valida se a resposta da API é `200` para um estado inexistente, conforme implementado na API.
+  - **ID Inválido**: Envia um ID inválido (não numérico) e espera um status `400` como resposta.
+  - **Filtro Inexistente**: Verifica se a resposta para um filtro inexistente retorna uma lista vazia.
+  - **Cabeçalho de Autorização Ausente**: Garante que a API retorne um status `401` quando o cabeçalho de autorização estiver ausente.
+  - **Tempo de Resposta**: Valida se o tempo de resposta da API é aceitável (inferior a 1000 ms).
+- **Gerar Relatório Allure**: Gera um relatório detalhado dos resultados dos testes, utilizando o Allure para facilitar a visualização.
+- **Fazer upload do Relatório Allure**: O relatório é carregado como um artefato do pipeline, permitindo o download e análise posterior.
 
 #### Testes de Aplicativo Móvel - Maestro
-- **Instalar CLI do Maestro**: Instala o Maestro CLI para executar testes em um aplicativo Android.
-- **Executar teste do Maestro**: Executa o teste para o aplicativo `app-release.apk`, garantindo que os principais fluxos de navegação do app estejam funcionando corretamente.
-- **Fazer upload do Relatório do Maestro**: Se o relatório for gerado com sucesso, ele é enviado como um artefato para análise.
+- **Instalar CLI do Maestro**: Instala o Maestro CLI para executar testes automatizados em um aplicativo Android.
+- **Executar teste do Maestro**: Executa o teste definido para o aplicativo `app-release.apk`, garantindo que os principais fluxos de navegação do app estejam funcionando corretamente.
+- **Fazer upload do Relatório do Maestro**: Se o relatório for gerado com sucesso, ele é carregado como um artefato para análise.
 
 #### Testes End-to-End (E2E) - Cucumber
-- **Instalar Preprocessador Cucumber**: Instala o preprocessador do Cucumber para integrar testes em formato Gherkin no Cypress.
-- **Instalar dependências adicionais**: Instala pacotes como `libgbm-dev`, `libgtk-3-0` e `xvfb` para suportar a execução de testes gráficos em ambientes de CI/CD.
-- **Executar testes E2E (Cucumber)**: Usa o Cypress junto com o Cucumber para executar testes E2E. Os testes incluem ações como login, navegação e validações importantes para garantir a estabilidade do fluxo do usuário.
+- **Instalar Preprocessador Cucumber**: Instala o preprocessador do Cucumber para integrar testes em formato Gherkin ao Cypress.
+- **Instalar dependências adicionais**: Instala pacotes como `libgbm-dev`, `libgtk-3-0` e `xvfb` para suportar a execução de testes gráficos em ambientes CI/CD.
+- **Executar testes E2E (Cucumber)**: Utiliza o Cypress junto com o Cucumber para executar testes de ponta a ponta. Esses testes incluem ações como login, navegação e validações importantes para garantir a estabilidade do fluxo do usuário.
 - **Gerar Relatório Allure para Testes E2E**: Gera um relatório detalhado dos resultados dos testes E2E.
-- **Fazer upload do Relatório Allure para Testes E2E**: O relatório gerado é enviado como um artefato para acompanhamento da qualidade do sistema.
+- **Fazer upload do Relatório Allure para Testes E2E**: O relatório gerado é carregado como um artefato do pipeline, permitindo a análise detalhada.
 
 #### Testes de Carga - K6
 - **Criar teste de carga**: O script de teste de carga está localizado no diretório `load-tests/load-test.js`. Ele simula 500 usuários simultâneos acessando a API pública `https://jsonplaceholder.typicode.com/posts/1` por um período de 5 minutos.
