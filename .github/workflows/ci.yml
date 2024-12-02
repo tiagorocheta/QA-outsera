@@ -34,6 +34,7 @@ jobs:
 
       - name: Configure Allure Plugin
         run: |
+          mkdir -p cypress/plugins
           echo "module.exports = {" >> cypress/plugins/index.js
           echo "  setupNodeEvents(on, config) {" >> cypress/plugins/index.js
           echo "    require('@shelex/cypress-allure-plugin/writer')(on);" >> cypress/plugins/index.js
