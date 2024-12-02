@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for API IBGE Tests
+name: CI/CD Pipeline for API IBGE Tests and Maestro Tests
 
 on:
   push:
@@ -61,3 +61,17 @@ jobs:
         with:
           name: allure-report
           path: allure-report
+
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+
+      - name: Run Maestro Test
+        run: |
+          maestro test maestro/app-release.apk --device android --appId com.qazandoqafood --format junit --output maestro-report.xml
+
+      - name: Upload Maestro Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-report
+          path: maestro-report.xml
