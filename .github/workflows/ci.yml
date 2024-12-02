@@ -1,11 +1,11 @@
-name: CI/CD Pipeline for Tests
+name: CI/CD Pipeline for Maestro Dev Tests
 
 on:
   push:
     branches:
       - main
       - ci-pipeline
-      - cucumber-integration
+      - testes-automatizados
   pull_request:
     branches:
       - main
@@ -15,49 +15,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2
+      - name: Check out the repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install Cypress
-      run: npx cypress install
+      - name: Install Cypress
+        run: npx cypress install
 
-    - name: Install Cucumber Preprocessor and Allure Reporter
-      run: npm install @badeball/cypress-cucumber-preprocessor allure-commandline mochawesome --save-dev
+      - name: Install Allure Reporter
+        run: npm install allure-commandline mocha-allure-reporter --save-dev
 
-    # Etapa para listar todos os arquivos e diretórios na raiz
-    - name: List All Files in Repository Root
-      run: ls -laR
+      - name: Run Cypress tests (Maestro Dev)
+        run: npx cypress run --spec "cypress/e2e/maestro-dev/**/*.*" --reporter mocha-allure-reporter
 
-    # Criar um arquivo .feature de exemplo para verificar se pode ser executado
-    - name: Create Sample Feature File
-      run: echo 'Feature: Sample\n  Scenario: Test\n    Given I open the website' > cypress/e2e/sample.feature
+      - name: Install Maestro CLI
+        run: npm install -g maestro@2.1.1
 
-    # Executar o teste no arquivo .feature criado
-    - name: Run Sample Feature Test
-      run: npx cypress run --spec "cypress/e2e/sample.feature" --reporter mochawesome
+      - name: Run Maestro tests
+        run: |
+          mkdir -p maestro-report
+          npx maestro test ./maestro/login_fluxo.yaml --format junit --output maestro-report/report.xml
 
-    # Executar todos os testes na pasta cypress/
-    - name: Run All Tests (Cypress)
-      run: npx cypress run --spec "cypress/**/*.*" --reporter mochawesome
+      - name: Generate Allure Report
+        run: |
+          mkdir -p allure-results
+          if [ -f maestro-report/report.xml ]; then cp maestro-report/report.xml allure-results/; fi
+          npx allure generate allure-results --clean -o allure-report
 
-    # Gerar o relatório Allure a partir dos relatórios de mochawesome
-    - name: Generate Allure Report
-      run: |
-        mkdir -p allure-results
-        cp cypress/reports/*.json allure-results/
-        npx allure generate allure-results --clean -o allure-report
-
-    # Upload do relatório do Allure
-    - name: Upload Allure Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: allure-report
-        path: allure-report
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report

@@ -1,0 +1,145 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 3,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-11-25T14:47:53.661Z",
+    "end": "2024-11-25T14:47:54.858Z",
+    "duration": 1197,
+    "testsRegistered": 3,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "88add986-ab16-4566-9765-1f3b8f370a0b",
+      "title": "",
+      "fullFile": "cypress/e2e/api-tests/ibge-api.cy.js",
+      "file": "cypress/e2e/api-tests/ibge-api.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+        {
+          "title": "Deve retornar os detalhes do estado de São Paulo (ID: 35)",
+          "fullTitle": "Deve retornar os detalhes do estado de São Paulo (ID: 35)",
+          "timedOut": null,
+          "duration": 1029,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "cy.request('/localidades/estados/35').then(response => {\n  validarResposta(response); // Utilizando a função aqui\n  expect(response.body).to.include({\n    id: 35,\n    nome: 'São Paulo',\n    sigla: 'SP'\n  });\n});",
+          "err": {},
+          "uuid": "974c67a3-9f97-4a50-a806-e1330db1ad5c",
+          "parentUUID": "88add986-ab16-4566-9765-1f3b8f370a0b",
+          "isHook": false,
+          "skipped": false
+        },
+        {
+          "title": "Deve retornar 200 para um estado inexistente",
+          "fullTitle": "Deve retornar 200 para um estado inexistente",
+          "timedOut": null,
+          "duration": 73,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "cy.request({\n  url: '/localidades/estados/999',\n  failOnStatusCode: false\n}).then(response => {\n  validarResposta(response); // Utilizando a função aqui\n  // Adicionar validações adicionais se necessário\n});",
+          "err": {},
+          "uuid": "71897f52-efef-4f6a-8aae-5bc6b2bc026b",
+          "parentUUID": "88add986-ab16-4566-9765-1f3b8f370a0b",
+          "isHook": false,
+          "skipped": false
+        }
+      ],
+      "suites": [
+        {
+          "uuid": "42165de8-e4c0-4949-828c-8ba4c5a64e70",
+          "title": "API IBGE - Testes de Estados",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Deve retornar a lista completa de estados",
+              "fullTitle": "API IBGE - Testes de Estados Deve retornar a lista completa de estados",
+              "timedOut": null,
+              "duration": 46,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request('/localidades/estados').then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.headers['content-type']).to.include('application/json');\n  expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0);\n  const estado = response.body[0];\n  // Verifica que os campos esperados estão presentes\n  expect(estado).to.have.keys(['id', 'nome', 'sigla', 'regiao']);\n});",
+              "err": {},
+              "uuid": "15cf9ba0-3d9b-4cd9-aecc-fd89c8eeda5a",
+              "parentUUID": "42165de8-e4c0-4949-828c-8ba4c5a64e70",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "15cf9ba0-3d9b-4cd9-aecc-fd89c8eeda5a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 46,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [
+        "974c67a3-9f97-4a50-a806-e1330db1ad5c",
+        "71897f52-efef-4f6a-8aae-5bc6b2bc026b"
+      ],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 1102,
+      "root": true,
+      "rootEmpty": false,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": true,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
