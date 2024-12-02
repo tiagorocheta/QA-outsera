@@ -12,7 +12,9 @@ module.exports = defineConfig({
         json: true,                   // Gera relatórios em JSON
     },
     e2e: {
-        baseUrl: 'https://www.saucedemo.com', // URL base para os testes web
+        baseUrl: process.env.TEST_TYPE === 'api' 
+                 ? 'https://servicodados.ibge.gov.br/api/v1' 
+                 : 'https://www.saucedemo.com', // URL base para API ou Web
         specPattern: [
             'cypress/e2e/**/*.cy.js',  // Inclui os testes existentes
             'cypress/e2e/**/*.feature' // Inclui os novos testes Gherkin
