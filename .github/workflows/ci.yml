@@ -27,11 +27,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Cypress
-        run: npx cypress install
+      - name: Install Cypress and Allure Plugin
+        run: |
+          npx cypress install
+          npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
+
+      - name: Configure Allure Plugin
+        run: |
+          echo "module.exports = {" >> cypress/plugins/index.js
+          echo "  setupNodeEvents(on, config) {" >> cypress/plugins/index.js
+          echo "    require('@shelex/cypress-allure-plugin/writer')(on);" >> cypress/plugins/index.js
+          echo "    return config;" >> cypress/plugins/index.js
+          echo "  }," >> cypress/plugins/index.js
+          echo "};" >> cypress/plugins/index.js
 
       - name: Run API IBGE Tests
-        run: npx cypress run --spec "api-tests/ibge-api.cy.js" --reporter mocha-allure-reporter
+        run: npx cypress run --spec "api-tests/ibge-api.cy.js" --reporter cypress-allure-plugin
 
       - name: Generate Allure Report
         run: |
