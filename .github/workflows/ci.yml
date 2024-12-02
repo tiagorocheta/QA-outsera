@@ -63,11 +63,7 @@ jobs:
           path: allure-report
 
       - name: Install Maestro CLI
-        run: npm install -g maestro@2.1.1" -o maestro
-          chmod +x maestro
-          mkdir -p ~/.local/bin
-          mv maestro ~/.local/bin/
-          echo "~/.local/bin" >> $GITHUB_PATH
+        run: npm install -g maestro@2.1.1
 
       - name: Run Maestro Test
         run: |
