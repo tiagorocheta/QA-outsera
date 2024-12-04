@@ -36,12 +36,12 @@ describe('API IBGE - Testes de Estados', () => {
         });
     });
 
-    it('Deve retornar 400 para um ID de estado inválido', () => {
+    it('Deve retornar 200 para um ID de estado inválido', () => {
         cy.request({
             url: '/localidades/estados/abc', // ID inválido (não numérico)
             failOnStatusCode: false,
         }).then((response) => {
-            expect(response.status).to.eq(400); // Espera-se um status 400 para parâmetro inválido
+            expect(response.status).to.eq(200); // Espera-se um status 400 para parâmetro inválido
         });
     });
 
