@@ -27,6 +27,9 @@ jobs:
       - name: Instalar Cypress
         run: npx cypress install
 
+      - name: Instalar Mochawesome
+        run: npm install mochawesome mochawesome-merge mochawesome-report-generator --save-dev
+
       - name: Executar testes da API IBGE
         run: |
           TEST_TYPE=api npx cypress run --spec "cypress/e2e/ibge-api.cy.js" || true # Permitir continuar mesmo em caso de erro
