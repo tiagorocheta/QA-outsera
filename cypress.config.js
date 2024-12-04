@@ -4,7 +4,7 @@ const addCucumberPreprocessorPlugin = require('@badeball/cypress-cucumber-prepro
 const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild').createEsbuildPlugin;
 
 module.exports = defineConfig({
-    reporter: 'allure', // Usar Allure como repórter
+    reporter: 'allure', // Definindo o Allure como o repórter
     e2e: {
         baseUrl: process.env.TEST_TYPE === 'api' 
                  ? 'https://servicodados.ibge.gov.br/api/v1' 
@@ -25,15 +25,18 @@ module.exports = defineConfig({
             await addCucumberPreprocessorPlugin(on, config);
 
             // Garantir que `env` esteja definido
-            config.env = config.env || {
-                apiBaseUrl: 'https://servicodados.ibge.gov.br/api/v1',
-                webBaseUrl: 'https://www.saucedemo.com'
-            };
+            if (!config.env) {
+                config.env = {};
+            }
+
+            // Configurar valores padrão para variáveis de ambiente
+            config.env.apiBaseUrl = config.env.apiBaseUrl || 'https://servicodados.ibge.gov.br/api/v1';
+            config.env.webBaseUrl = config.env.webBaseUrl || 'https://www.saucedemo.com';
 
             // Integrar o plugin do Allure
             require('@shelex/cypress-allure-plugin/writer')(on);
 
-            return config; // Retornar o config atualizado
+            return config; // Retornar o `config` atualizado
         },
     },
     env: {
