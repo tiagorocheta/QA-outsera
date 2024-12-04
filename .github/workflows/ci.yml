@@ -22,38 +22,38 @@ jobs:
           node-version: '16'
 
       - name: Remover diretório node_modules
-        run: rm -rf node_modules # Remove node_modules para evitar inconsistências de plataforma
+        run: rm -rf node_modules
 
       - name: Instalar dependências
-        run: npm install # Reinstalar dependências no ambiente de destino
+        run: npm ci # Reinstalar dependências no ambiente de destino de forma limpa
 
       - name: Instalar Cypress
         run: npx cypress install
 
       - name: Executar testes da API IBGE
         run: |
-          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true || true # Permitir continuar mesmo em caso de erro
+          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true || true
 
       - name: Executar testes E2E (Cucumber)
         run: |
-          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true' || true # Permitir continuar mesmo em caso de erro
+          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true' || true
 
       - name: Fazer upload do Relatório Mochawesome
         uses: actions/upload-artifact@v4
         with:
           name: mochawesome-report
           path: cypress/reports
-        continue-on-error: true # Ignorar erros ao fazer upload do relatório Mochawesome
+        continue-on-error: true
 
       - name: Instalar CLI do Maestro
         run: npm install -g maestro@2.1.1
-        continue-on-error: true # Ignorar erros ao instalar CLI do Maestro
+        continue-on-error: true
 
       - name: Executar teste do Maestro
         run: |
           mkdir -p maestro-report
           npx maestro test maestro/app-release.apk --format junit --output maestro-report.xml || echo "Erro na execução do teste do Maestro"
-        continue-on-error: true # Ignorar erros ao executar teste do Maestro
+        continue-on-error: true
 
       - name: Fazer upload do Relatório do Maestro
         if: success()
@@ -64,17 +64,17 @@ jobs:
           else
             echo "Relatório não encontrado, não será feito upload"
           fi
-        continue-on-error: true # Ignorar erros ao fazer o upload do relatório do Maestro
+        continue-on-error: true
 
       - name: Instalar Preprocessador Cucumber
         run: npm install @badeball/cypress-cucumber-preprocessor --save-dev
-        continue-on-error: true # Ignorar erros ao instalar preprocessador Cucumber
+        continue-on-error: true
 
       - name: Instalar dependências adicionais
         run: |
           sudo apt-get update
           sudo apt-get install -y libgbm-dev libgtk-3-0 xvfb
-        continue-on-error: true # Ignorar erros ao instalar dependências adicionais
+        continue-on-error: true
 
       # Etapa do K6 desativada temporariamente para otimizar o tempo de execução
       # - name: Instalar K6
@@ -85,12 +85,12 @@ jobs:
       #     echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
       #     sudo apt-get update
       #     sudo apt-get install -y k6
-      #   continue-on-error: true # Ignorar erros ao instalar K6
+      #   continue-on-error: true
 
       # - name: Executar teste de carga com K6
       #   run: |
       #     k6 run load-tests/load-test.js --out json=load-tests/load-test.json
-      #   continue-on-error: true # Ignorar erros ao executar teste de carga
+      #   continue-on-error: true
 
       # - name: Fazer upload do Relatório de Teste de Carga
       #   if: success()
@@ -98,4 +98,4 @@ jobs:
       #   with:
       #     name: k6-report
       #     path: load-tests/load-test.json
-      #   continue-on-error: true # Ignorar erros ao fazer upload do relatório de teste de carga
+      #   continue-on-error: true
