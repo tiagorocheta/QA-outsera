@@ -4,11 +4,11 @@ const addCucumberPreprocessorPlugin = require('@badeball/cypress-cucumber-prepro
 const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild').createEsbuildPlugin;
 
 module.exports = defineConfig({
-    reporter: 'allure',
+    reporter: '@shelex/allure-mocha', // Corrigindo o nome do repórter para Allure Mocha
     e2e: {
         baseUrl: process.env.TEST_TYPE === 'api' 
                  ? 'https://servicodados.ibge.gov.br/api/v1' 
-                 : 'https://www.saucedemo.com',
+                 : 'https://www.saucedemo.com', 
         specPattern: [
             'cypress/e2e/**/*.cy.js',
             'cypress/e2e/**/*.feature'
@@ -38,7 +38,7 @@ module.exports = defineConfig({
                 console.error("Erro ao integrar o Allure plugin:", error.message);
             }
 
-            return config; // Retornar o `config` atualizado
+            return config; 
         },
     },
 });
