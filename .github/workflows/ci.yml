@@ -19,10 +19,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18' # Atualizando para a versão 18 para compatibilidade
-
-      - name: Remover diretório node_modules
-        run: rm -rf node_modules # Remove node_modules para evitar inconsistências de plataforma
+          node-version: '18' # Atualizando para a versão 18 para compatibilidade com dependências
 
       - name: Instalar dependências
         run: npm ci # Reinstalar dependências no ambiente de destino de forma limpa
