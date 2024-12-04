@@ -1,12 +1,9 @@
-name: CI/CD Pipeline for testes-outsera
+name: Pipeline de CI/CD para Automação de Testes - Outsera
 
 on:
   push:
     branches:
       - main
-      - ci-pipeline
-      - testes-automatizados
-      - maestro
   pull_request:
     branches:
       - main
@@ -49,7 +46,7 @@ jobs:
 
       - name: Executar testes da API IBGE
         run: |
-          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js"
+          TEST_TYPE=api npx cypress run --spec "cypress/e2e/ibge-api.cy.js"
 
       - name: Gerar Relatório Allure
         run: |
