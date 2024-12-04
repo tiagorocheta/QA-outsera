@@ -21,14 +21,14 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Remover diretório node_modules
+        run: rm -rf node_modules # Remove node_modules para evitar inconsistências de plataforma
+
       - name: Instalar dependências
-        run: npm install
+        run: npm install # Reinstalar dependências no ambiente de destino
 
       - name: Instalar Cypress
         run: npx cypress install
-
-      - name: Instalar Mochawesome
-        run: npm install mochawesome mochawesome-merge mochawesome-report-generator --save-dev
 
       - name: Executar testes da API IBGE
         run: |
