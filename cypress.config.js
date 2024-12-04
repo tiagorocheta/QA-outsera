@@ -4,12 +4,12 @@ const addCucumberPreprocessorPlugin = require('@badeball/cypress-cucumber-prepro
 const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild').createEsbuildPlugin;
 
 module.exports = defineConfig({
-    reporter: 'mochawesome', // Adiciona Mochawesome como repórter
+    reporter: 'cypress-allure-plugin', // Substituir Mochawesome por Allure
     reporterOptions: {
-        reportDir: 'cypress/reports', // Diretório para os relatórios
-        overwrite: false,             // Não sobrescreve relatórios antigos
-        html: true,                   // Gera relatórios em HTML
-        json: true,                   // Gera relatórios em JSON
+        reportDir: 'cypress/reports', // Diretório para os relatórios Allure
+        overwrite: false,             
+        html: true,                   
+        json: true,                   
     },
     e2e: {
         baseUrl: process.env.TEST_TYPE === 'api' 
