@@ -24,13 +24,13 @@ module.exports = defineConfig({
             on('file:preprocessor', bundler);
             await addCucumberPreprocessorPlugin(on, config);
 
-            // Garantir que o plugin do Allure seja integrado
+            // Certifique-se de que `env` esteja definido
+            config.env = config.env || {};
+
+            // Integrar o plugin do Allure
             require('@shelex/cypress-allure-plugin/writer')(on);
 
-            // Certificar que config.env está definido
-            config.env = config.env || {}; 
-
-            return config; // Retornar o config atualizado
+            return config;
         },
     },
     env: {
