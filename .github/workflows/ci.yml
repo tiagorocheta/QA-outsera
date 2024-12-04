@@ -27,13 +27,23 @@ jobs:
       - name: Instalar Cypress
         run: npx cypress install
 
+      - name: Instalar Mochawesome
+        run: npm install mochawesome mochawesome-merge mochawesome-report-generator --save-dev
+
       - name: Executar testes da API IBGE
         run: |
-          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" || true # Permitir continuar mesmo em caso de erro
+          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true || true # Permitir continuar mesmo em caso de erro
 
       - name: Executar testes E2E (Cucumber)
         run: |
-          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature"' || true # Permitir continuar mesmo em caso de erro
+          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true' || true # Permitir continuar mesmo em caso de erro
+
+      - name: Fazer upload do Relatório Mochawesome
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: cypress/reports
+        continue-on-error: true # Ignorar erros ao fazer upload do relatório Mochawesome
 
       - name: Instalar CLI do Maestro
         run: npm install -g maestro@2.1.1
