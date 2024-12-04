@@ -4,7 +4,7 @@ const addCucumberPreprocessorPlugin = require('@badeball/cypress-cucumber-prepro
 const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild').createEsbuildPlugin;
 
 module.exports = defineConfig({
-    reporter: '@shelex/allure-mocha', // Corrigindo o nome do repórter para Allure Mocha
+    reporter: 'cypress-allure-plugin', // Corrigindo para o repórter Allure correto
     e2e: {
         baseUrl: process.env.TEST_TYPE === 'api' 
                  ? 'https://servicodados.ibge.gov.br/api/v1' 

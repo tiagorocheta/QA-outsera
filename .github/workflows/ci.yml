@@ -28,7 +28,7 @@ jobs:
         run: npx cypress install
 
       - name: Instalar Plugin Allure
-        run: npm install @shelex/cypress-allure-plugin allure-commandline @shelex/allure-mocha --save-dev
+        run: npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
 
       - name: Executar testes da API IBGE
         run: |
