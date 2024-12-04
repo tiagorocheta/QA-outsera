@@ -85,12 +85,12 @@ jobs:
       #     echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
       #     sudo apt-get update
       #     sudo apt-get install -y k6
-      #   continue-on-error: true # Ignorar erros ao instalar K6
+      #   continue-on-error: true
 
       # - name: Executar teste de carga com K6
       #   run: |
       #     k6 run load-tests/load-test.js --out json=load-tests/load-test.json
-      #   continue-on-error: true # Ignorar erros ao executar teste de carga
+      #   continue-on-error: true
 
       # - name: Fazer upload do Relatório de Teste de Carga
       #   if: success()
@@ -98,4 +98,4 @@ jobs:
       #   with:
       #     name: k6-report
       #     path: load-tests/load-test.json
-      #   continue-on-error: true # Ignorar erros ao fazer upload do relatório de teste de carga
+      #   continue-on-error: true
