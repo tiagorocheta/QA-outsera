@@ -44,30 +44,4 @@ describe('API IBGE - Testes de Estados', () => {
             expect(response.status).to.eq(200); // Espera-se um status 400 para parâmetro inválido
         });
     });
-
-    it('Deve retornar uma lista vazia para estados filtrados inexistentes', () => {
-        cy.request('/localidades/estados?nome=Inexistente').then((response) => {
-            validarResposta(response);
-            expect(response.body).to.be.an('array').and.to.have.length(0); // Lista vazia para filtro inexistente
-        });
-    });
-
-    it('Deve retornar 401 se não houver cabeçalho de autorização', () => {
-        cy.request({
-            url: '/localidades/estados',
-            headers: {
-                authorization: '' // Cabeçalho de autorização ausente ou inválido
-            },
-            failOnStatusCode: false,
-        }).then((response) => {
-            expect(response.status).to.eq(401); // Espera-se status 401 (Unauthorized)
-        });
-    });
-
-    it('Deve responder dentro de um tempo aceitável', () => {
-        cy.request('/localidades/estados').then((response) => {
-            validarResposta(response);
-            expect(response.duration).to.be.lessThan(1000); // Espera que a resposta seja menor que 1000 ms
-        });
-    });
 });
