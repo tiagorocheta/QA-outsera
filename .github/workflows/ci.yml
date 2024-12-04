@@ -23,11 +23,9 @@ jobs:
 
       - name: Instalar dependências
         run: npm install
-        continue-on-error: true # Ignorar erros ao instalar dependências
 
       - name: Instalar Cypress
         run: npx cypress install
-        continue-on-error: true # Ignorar erros ao instalar Cypress
 
       - name: Executar testes da API IBGE
         run: |
@@ -35,7 +33,14 @@ jobs:
 
       - name: Executar testes E2E (Cucumber)
         run: |
-          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --env allure=true' || true # Permitir continuar mesmo em caso de erro
+          xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature"' || true # Permitir continuar mesmo em caso de erro
+
+      - name: Fazer upload do Relatório Mochawesome
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: cypress/reports
+        continue-on-error: true # Ignorar erros ao fazer upload do relatório Mochawesome
 
       - name: Instalar CLI do Maestro
         run: npm install -g maestro@2.1.1
