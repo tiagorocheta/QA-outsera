@@ -24,13 +24,16 @@ module.exports = defineConfig({
             on('file:preprocessor', bundler);
             await addCucumberPreprocessorPlugin(on, config);
 
-            // Certifique-se de que `env` esteja definido
-            config.env = config.env || {};
+            // Garantir que `env` esteja definido
+            config.env = config.env || {
+                apiBaseUrl: 'https://servicodados.ibge.gov.br/api/v1',
+                webBaseUrl: 'https://www.saucedemo.com'
+            };
 
             // Integrar o plugin do Allure
             require('@shelex/cypress-allure-plugin/writer')(on);
 
-            return config;
+            return config; // Retornar o config atualizado
         },
     },
     env: {

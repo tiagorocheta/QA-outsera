@@ -24,25 +24,10 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Reinstalar dependências para a plataforma
-        run: |
-          rm -rf node_modules
-          npm install
-
       - name: Instalar Cypress e Plugin Allure
         run: |
           npx cypress install
           npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
-
-      - name: Configurar Plugin Allure
-        run: |
-          mkdir -p cypress/plugins
-          echo "module.exports = {" >> cypress/plugins/index.js
-          echo "  setupNodeEvents(on, config) {" >> cypress/plugins/index.js
-          echo "    require('@shelex/cypress-allure-plugin/writer')(on);" >> cypress/plugins/index.js
-          echo "    return config;" >> cypress/plugins/index.js
-          echo "  }," >> cypress/plugins/index.js
-          echo "};" >> cypress/plugins/index.js
 
       - name: Executar testes da API IBGE
         run: |
