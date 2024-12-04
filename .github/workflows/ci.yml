@@ -16,23 +16,32 @@ jobs:
       - name: Fazer checkout do repositório
         uses: actions/checkout@v2
 
-      - name: Configurar Node.js
+      - name: Configurar Node.js e instalar dependências
         uses: actions/setup-node@v2
         with:
           node-version: '18' # Atualizando para a versão 18 para compatibilidade com dependências
+      - run: npm ci # Reinstalar dependências no ambiente de destino de forma limpa
 
-      - name: Instalar dependências
-        run: npm ci # Reinstalar dependências no ambiente de destino de forma limpa
-
-      - name: Instalar Cypress
-        run: npx cypress install
-
-      - name: Executar testes da API IBGE
+      - name: Instalar Cypress e Preprocessador Cucumber
         run: |
-          TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true
+          npm install @badeball/cypress-cucumber-preprocessor --save-dev
+          npx cypress install
 
-      - name: Executar testes E2E (Cucumber)
+      - name: Instalar dependências adicionais e CLI do Maestro
         run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev libgtk-3-0 xvfb
+          npm install -g maestro@2.1.1
+
+      - name: Limpar relatórios anteriores
+        run: |
+          rm -rf cypress/reports/*
+          rm -rf maestro-report/*
+          rm -rf load-tests/load-test.json
+
+      - name: Executar testes da API IBGE e testes E2E (Cucumber)
+        run: |
+          xvfb-run -a bash -c 'TEST_TYPE=api npx cypress run --spec "cypress/e2e/api-tests/ibge-api.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true'
           xvfb-run -a bash -c 'TEST_TYPE=e2e npx cypress run --spec "cypress/e2e/**/*.feature" --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=true,json=true'
 
       - name: Fazer upload do Relatório Mochawesome
@@ -40,9 +49,6 @@ jobs:
         with:
           name: mochawesome-report
           path: cypress/reports
-
-      - name: Instalar CLI do Maestro
-        run: npm install -g maestro@2.1.1
 
       - name: Executar teste do Maestro
         run: |
@@ -59,17 +65,8 @@ jobs:
             echo "Relatório não encontrado, não será feito upload"
           fi
 
-      - name: Instalar Preprocessador Cucumber
-        run: npm install @badeball/cypress-cucumber-preprocessor --save-dev
-
-      - name: Instalar dependências adicionais
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm-dev libgtk-3-0 xvfb
-
       - name: Instalar K6
         run: |
-          sudo apt-get update
           sudo apt-get install -y gnupg software-properties-common
           curl -s https://dl.k6.io/key.gpg | sudo apt-key add -
           echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
