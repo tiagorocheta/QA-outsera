@@ -24,13 +24,15 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      - name: Instalar Cypress
+        run: npx cypress install
+
       - name: Executar testes da API IBGE
         run: |
           TEST_TYPE=api npx cypress run --spec "cypress/e2e/ibge-api.cy.js"
 
-      - name: Instalar Cypress e Plugin Allure
-        run: |
-          npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
+      - name: Instalar Plugin Allure
+        run: npm install @shelex/cypress-allure-plugin allure-commandline --save-dev
 
       - name: Gerar Relatório Allure
         run: |
